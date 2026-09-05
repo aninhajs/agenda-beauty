@@ -1,0 +1,183 @@
+.dashboard-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.metric-card {
+  padding: 1.5rem;
+  border-radius: 1rem;
+  color: white;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.metric-card.green {
+  /* background: linear-gradient(135deg, #707070 0%, #b0afaf 100%); */
+  color: #080808;
+}
+
+.metric-card.blue {
+  /* background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); */
+  color: #080808;
+}
+
+.metric-card.purple {
+  /* background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); */
+  color: #080808;
+}
+
+.metric-card.orange {
+  /* background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); */
+  color: #080808;
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.metric-icon {
+  font-size: 1.25rem;
+}
+
+.metric-header h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.metric-footer {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.chart-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 20px 50px rgba(7, 2, 2, 0.1);
+}
+
+.chart-header {
+  margin-bottom: 1.5rem;
+}
+
+.chart-header h3 {
+  font-size: 1.25rem;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+}
+
+.chart-header p {
+  font-size: 0.9rem;
+  color: #040404;
+}
+
+.chart-container {
+  width: 100%;
+}
+
+.top-services {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.service-rank-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  /* background: linear-gradient(135deg, #fdf2f8 0%, #fae8ff 100%); */
+  border-radius: 0.75rem;
+  border: 2px solid #050505;
+}
+
+.service-rank-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rank-badge {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #691941 0%, #8b5cf6 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.service-info h4 {
+  font-size: 1.1rem;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+}
+
+.service-info p {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.service-rank-right {
+  text-align: right;
+}
+
+.service-count {
+  font-size: 1.1rem;
+  color: #1f2937;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.service-price {
+  font-size: 0.95rem;
+  color: #070707;
+}
+
+@media (max-width: 1024px) {
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-rank-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .service-rank-right {
+    text-align: center;
+  }
+}

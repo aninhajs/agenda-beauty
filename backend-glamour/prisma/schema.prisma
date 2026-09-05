@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Modelo para usuários (clientes e administradores)
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(CLIENT) // CLIENT ou ADMIN
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  appointments Appointment[]
+
+  @@map("users")
+}
+
+// Modelo para profissionais
+model Professional {
+  id        String   @id @default(cuid())
+  name      String
+  specialty String
+  email     String?  // Campo opcional
+  phone     String?  // Campo opcional
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  appointments Appointment[]
+
+  @@map("professionals")
+}
+
+// Modelo para serviços
+model Service {
+  id        String   @id @default(cuid())
+  name      String
+  price     Float
+  duration  Int      // duração em minutos
+  category  String   @default("Outro")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  appointments Appointment[]
+
+  @@map("services")
+}
+
+// Modelo para agendamentos
+model Appointment {
+  id            String   @id @default(cuid())
+  clientName    String   // nome do cliente (pode ser duplicado do User.name)
+  date          String   // formato YYYY-MM-DD
+  time          String   // formato HH:MM
+  status        Status   @default(PENDING) // PENDING, CONFIRMED, CANCELLED
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relacionamentos
+  userId        String?
+  user          User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  professionalId String
+  professional   Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  serviceId     String
+  service       Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  // Regra 2: Referência opcional ao cliente de WhatsApp (Client)
+  clientId      Int?
+  client        Client?  @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  @@map("appointments")
+}
+
+// Modelo para clientes que se autenticam via WhatsApp (sem email/senha)
+model Client {
+  id           Int           @id @default(autoincrement())
+  name         String
+  whatsapp     String        @unique
+  createdAt    DateTime      @default(now())
+
+  // Relacionamentos
+  appointments Appointment[]
+
+  @@map("clients")
+}
+
+// Modelo para bloqueio de dias pelo admin (imprevistos)
+model BlockedDate {
+  id        Int      @id @default(autoincrement())
+  date      String   @unique
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@map("blocked_dates")
+}
+
+// Enums para tipos
+enum Role {
+  CLIENT
+  ADMIN
+}
+
+enum Status {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
