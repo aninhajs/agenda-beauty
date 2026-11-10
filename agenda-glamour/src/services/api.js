@@ -1,19 +1,34 @@
 // Configuração da API
 const API_BASE_URL = "http://127.0.0.1:3001/api";
 
+// Lê o token admin do localStorage (salvo após login admin)
+function getAdminToken() {
+  try {
+    const stored = localStorage.getItem("glamour_admin");
+    return stored ? JSON.parse(stored).token : null;
+  } catch {
+    return null;
+  }
+}
+
 // Função helper para fazer requests
 async function apiRequest(url, options = {}) {
   try {
+    const token = getAdminToken();
+    const headers = {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    };
+
     const response = await fetch(`${API_BASE_URL}${url}`, {
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
       ...options,
+      headers,
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
     }
 
     return await response.json();
@@ -94,6 +109,32 @@ export const authApi = {
       method: "POST",
       body: JSON.stringify(credentials),
     }),
+};
+
+// Autenticação de admin — salva token no localStorage
+export const adminAuthApi = {
+  login: async (credentials) => {
+    const data = await authApi.login(credentials);
+    if (data.token && data.user?.role === "ADMIN") {
+      localStorage.setItem(
+        "glamour_admin",
+        JSON.stringify({ token: data.token, user: data.user })
+      );
+      return data;
+    }
+    throw new Error("Acesso negado. Usuário não é administrador.");
+  },
+  logout: () => {
+    localStorage.removeItem("glamour_admin");
+  },
+  getSession: () => {
+    try {
+      const stored = localStorage.getItem("glamour_admin");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  },
 };
 
 // Autenticação de cliente via Nome + WhatsApp (Regra 1)

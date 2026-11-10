@@ -25,7 +25,7 @@
 
 .add-btn {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  background: #1e40af;
   color: white;
   border: none;
   border-radius: 0.75rem;
@@ -33,12 +33,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+  box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
 }
 
 .add-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+  box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4);
 }
 
 .professionals-grid {
@@ -201,7 +201,7 @@
 }
 
 .save-btn {
-  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  /* background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); */
   color: white;
 }
 

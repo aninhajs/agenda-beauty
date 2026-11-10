@@ -1,17 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import prisma from "../lib/prisma.js";
+import { requireAuth, requireAdmin } from "../lib/authMiddleware.js";
 
 // Carregar variáveis de ambiente
 dotenv.config();
 
 const router = express.Router();
-
-// Middleware para verificar se é admin
-const requireAdmin = (req, res, next) => {
-  // Por enquanto, vamos permitir tudo (implementar depois com JWT)
-  next();
-};
 
 // GET /services - Listar todos os serviços
 router.get("/", async (req, res) => {
@@ -48,7 +43,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST /services - Criar novo serviço (apenas admin)
-router.post("/", requireAdmin, async (req, res) => {
+router.post("/", requireAuth, requireAdmin, async (req, res) => {
   try {
     console.log("Request body:", req.body);
     const { name, price, duration, category } = req.body;
@@ -78,7 +73,7 @@ router.post("/", requireAdmin, async (req, res) => {
 });
 
 // PUT /services/:id - Atualizar serviço (apenas admin)
-router.put("/:id", requireAdmin, async (req, res) => {
+router.put("/:id", requireAuth, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { name, price, duration, category } = req.body;
@@ -104,7 +99,7 @@ router.put("/:id", requireAdmin, async (req, res) => {
 });
 
 // DELETE /services/:id - Deletar serviço (apenas admin)
-router.delete("/:id", requireAdmin, async (req, res) => {
+router.delete("/:id", requireAuth, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 

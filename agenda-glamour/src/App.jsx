@@ -23,113 +23,79 @@ export default function App({
 
   return (
     <div className="app">
-      <div className="container">
-        {/* Header */}
-        <div className="header">
-          <div className="header-content">
-            <div className="logo-container">
-              <div className="logo-icon">
-                <Icon name="crown" size={28} />
-              </div>
-              <h1 className="title">Brenda Beauty </h1>
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* HEADER - Logo + Informações + Logout */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <header className="app-header">
+        <div className="app-header-container">
+          {/* Logo e Branding */}
+          <div className="app-header-brand">
+            <div className="app-logo-icon">
+              <Icon name="crown" size={24} />
             </div>
-            <p className="subtitle">
-              Experimente nossos serviços premium de beleza e bem-estar
-            </p>
+            <div className="app-brand-info">
+              <h1 className="app-brand-title">Brenda Beauty</h1>
+              <p className="app-brand-tagline">Serviços Premium de Beleza</p>
+            </div>
           </div>
 
-          {/* Regra 1: Info do cliente logado + botão de logout */}
-          {loggedClient && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "12px",
-                marginTop: "12px",
-                padding: "10px 16px",
-                background: "rgba(255,255,255,0.08)",
-                borderRadius: "12px",
-                border: "1px solid rgba(255,255,255,0.15)",
-              }}
-            >
-              {/* <span style={{ fontSize: "20px" }}>👤</span> */}
-              {/* <div style={{ flex: 1 }}>
-                <div
-                  style={{
-                    color: "#fff",
-                    fontWeight: "600",
-                    fontSize: "14px",
-                  }}
-                >
-                  {loggedClient.name}
-                </div>
-                <div
-                  style={{
-                    color: "rgba(255,255,255,0.5)",
-                    fontSize: "12px",
-                  }}
-                >
-                  📱 {loggedClient.whatsapp}
-                </div>
-              </div> */}
-              <button
-                onClick={onLogout}
-                style={{
-                  background: "rgba(239,68,68,0.15)",
-                  border: "1px solid rgba(239,68,68,0.3)",
-                  borderRadius: "8px",
-                  color: "#fca5a5",
-                  padding: "6px 12px",
-                  fontSize: "12px",
-                  cursor: "pointer",
-                  fontWeight: "600",
-                }}
-              >
-                Sair
-              </button>
-            </div>
+          {/* Botão Logout ou Mensagem */}
+          {loggedClient ? (
+            <button onClick={onLogout} className="app-logout-btn">
+              <Icon name="logOut" size={16} />
+              <span>Sair</span>
+            </button>
+          ) : (
+            <p className="app-guest-message">Bem-vindo ao nosso salão premium</p>
           )}
         </div>
+      </header>
+      {/* Conteúdo Principal */}
+      <div className="app-container">
+        {/* Hero Section */}
+        <section className="app-hero">
+          <div className="app-hero-content">
+            <h2 className="app-hero-title">Agende seu próximo serviço</h2>
+            <p className="app-hero-subtitle">Escolha entre nossos serviços premium e profissionais especialistas</p>
+          </div>
+        </section>
 
-        {/* Área do cliente: apenas agendamento e visualização */}
-        <div className="client-view">
-          <div className="tabs">
-            <div className="tabs-list">
-              <button
-                className={`tab ${activeTab === "booking" ? "active" : ""}`}
-                onClick={() => setActiveTab("booking")}
-              >
-                <Icon name="calendar" size={18} />
-                Novo Agendamento
-              </button>
-              <button
-                className={`tab ${
-                  activeTab === "appointments" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("appointments")}
-              >
-                <Icon name="briefcase" size={18} />
-                Meus Agendamentos
-              </button>
-            </div>
+        {/* Abas de Navegação */}
+        <div className="app-tabs">
+          <div className="app-tabs-nav">
+            <button
+              className={`app-tab-btn ${activeTab === "booking" ? "active" : ""}`}
+              onClick={() => setActiveTab("booking")}
+            >
+              <Icon name="calendar" size={20} />
+              <span>Novo Agendamento</span>
+            </button>
+            <button
+              className={`app-tab-btn ${activeTab === "appointments" ? "active" : ""}`}
+              onClick={() => setActiveTab("appointments")}
+            >
+              <Icon name="briefcase" size={20} />
+              <span>Meus Agendamentos</span>
+            </button>
+          </div>
 
-            <div className="tabs-content">
-              {activeTab === "booking" && (
-                <BookingForm
-                  onBooking={handleBooking}
-                  services={services}
-                  professionals={professionals}
-                />
-              )}
+          {/* Conteúdo das Abas */}
+          <div className="app-tabs-content">
+            {activeTab === "booking" && (
+              <BookingForm
+                onBooking={handleBooking}
+                services={services}
+                professionals={professionals}
+              />
+            )}
 
-              {activeTab === "appointments" && (
-                <AppointmentsList
-                  appointments={appointments}
-                  onDelete={onDeleteAppointment}
-                  loggedClient={loggedClient}
-                />
-              )}
-            </div>
+            {activeTab === "appointments" && (
+              <AppointmentsList
+                appointments={appointments}
+                onDelete={onDeleteAppointment}
+                loggedClient={loggedClient}
+              />
+            )}
           </div>
         </div>
       </div>

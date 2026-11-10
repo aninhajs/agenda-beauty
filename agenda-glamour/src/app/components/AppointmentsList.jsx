@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { appointmentsApi } from "../../services/api.js";
+import Icon from "./ui/LucideIcons";
 import "./AppointmentsList.css";
 
 export default function AppointmentsList({ appointments: propAppointments, onDelete, loggedClient }) {
@@ -239,41 +240,29 @@ export default function AppointmentsList({ appointments: propAppointments, onDel
 
                   <div className="appointment-details">
                     <div className="detail">
-                      <span
-                        className="detail-icon"
-                        style={{ color: "#ec4899" }}
-                      >
-                        ✂️
+                      <span className="detail-icon" style={{ color: "#ec4899" }}>
+                        <Icon name="scissors" size={20} />
                       </span>
                       <span>{getServiceName(appointment)}</span>
                     </div>
 
                     <div className="detail">
-                      <span
-                        className="detail-icon"
-                        style={{ color: "#8b5cf6" }}
-                      >
-                        👤
+                      <span className="detail-icon" style={{ color: "#8b5cf6" }}>
+                        <Icon name="users" size={20} />
                       </span>
                       <span>{getProfessionalName(appointment)}</span>
                     </div>
 
                     <div className="detail">
-                      <span
-                        className="detail-icon"
-                        style={{ color: "#6366f1" }}
-                      >
-                        📅
+                      <span className="detail-icon" style={{ color: "#6366f1" }}>
+                        <Icon name="calendar" size={20} />
                       </span>
                       <span>{formatDate(appointment.date)}</span>
                     </div>
 
                     <div className="detail">
-                      <span
-                        className="detail-icon"
-                        style={{ color: "#3b82f6" }}
-                      >
-                        🕐
+                      <span className="detail-icon" style={{ color: "#3b82f6" }}>
+                        <Icon name="clock" size={20} />
                       </span>
                       <span>{appointment.time}</span>
                     </div>
@@ -288,8 +277,9 @@ export default function AppointmentsList({ appointments: propAppointments, onDel
                   className="delete-btn"
                   onClick={() => handleDelete(appointment)}
                   title="Cancelar agendamento"
+                  style={{ color: "#ef4444" }}
                 >
-                  🗑️
+                  <Icon name="trash" size={18} />
                 </button>
               </div>
             ))}

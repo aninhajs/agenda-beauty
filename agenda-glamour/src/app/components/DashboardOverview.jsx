@@ -8,9 +8,6 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
-  PieChart,
-  Pie,
-  Cell,
 } from "recharts";
 import Icon from "./ui/LucideIcons";
 import "./DashboardOverview.css";
@@ -30,9 +27,6 @@ export default function DashboardOverview({
   ).length;
   const pendingAppointments = appointments.filter(
     (apt) => apt.status === "pending",
-  ).length;
-  const completedAppointments = appointments.filter(
-    (apt) => apt.status === "completed",
   ).length;
 
   // Revenue by service category
@@ -63,13 +57,6 @@ export default function DashboardOverview({
       return professionalName === prof.name;
     }).length,
   }));
-
-  // Status distribution
-  const statusData = [
-    { name: "Confirmados", value: confirmedAppointments, color: "#10b981" },
-    { name: "Pendentes", value: pendingAppointments, color: "#f59e0b" },
-    { name: "Concluídos", value: completedAppointments, color: "#6366f1" },
-  ];
 
   // Daily revenue (mock data for demonstration)
   const dailyRevenueData = [
@@ -165,37 +152,6 @@ export default function DashboardOverview({
                   dot={{ fill: "#10b981", r: 4 }}
                 />
               </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Status Distribution */}
-        <div className="chart-card">
-          <div className="chart-header">
-            <h3>Status dos Agendamentos</h3>
-            <p>Distribuição por status</p>
-          </div>
-          <div className="chart-container">
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={statusData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) =>
-                    `${name}: ${(percent * 100).toFixed(0)}%`
-                  }
-                  outerRadius={100}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {statusData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
             </ResponsiveContainer>
           </div>
         </div>

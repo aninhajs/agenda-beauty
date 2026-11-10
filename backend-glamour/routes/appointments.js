@@ -1,20 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
 import prisma from "../lib/prisma.js";
+import { requireAuth, requireAdmin } from "../lib/authMiddleware.js";
 
 // Carregar variáveis de ambiente
 dotenv.config();
 
 const router = express.Router();
 
-// Middleware para verificar se é admin
-const requireAdmin = (req, res, next) => {
-  // Por enquanto, vamos permitir tudo (implementar depois com JWT)
-  next();
-};
-
-// GET /appointments - Listar agendamentos (clientes veem apenas os seus, admin vê todos)
-router.get("/", async (req, res) => {
+// GET /appointments - Listar TODOS os agendamentos (apenas admin)
+router.get("/", requireAuth, requireAdmin, async (req, res) => {
   try {
     // Por enquanto, retorna todos (implementar filtro por usuário depois)
     const appointments = await prisma.appointment.findMany({
@@ -128,8 +123,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PUT /appointments/:id - Atualizar agendamento (admin pode alterar status)
-router.put("/:id", async (req, res) => {
+// PUT /appointments/:id - Atualizar agendamento (apenas admin)
+router.put("/:id", requireAuth, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -156,8 +151,8 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// DELETE /appointments/:id - Cancelar agendamento
-router.delete("/:id", async (req, res) => {
+// DELETE /appointments/:id - Cancelar agendamento (apenas admin ou dono)
+router.delete("/:id", requireAuth, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 

@@ -8,6 +8,8 @@
     "dev": "node --watch server.js",
     "db:seed": "prisma db seed",
     "db:migrate": "prisma migrate dev",
+    "admin:create": "node create-admin.js",
+    "admin:create-quick": "node create-admin-quick.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

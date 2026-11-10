@@ -17,6 +17,7 @@ import {
   Tag,
   AlertCircle,
   Menu,
+  LogOut,
 } from "lucide-react";
 
 const iconMap = {
@@ -37,6 +38,7 @@ const iconMap = {
   tag: Tag,
   alert: AlertCircle,
   menu: Menu,
+  logOut: LogOut,
 };
 
 const LucideIcon = ({ name, size = 24, className = "", ...props }) => {

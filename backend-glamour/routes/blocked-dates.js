@@ -1,5 +1,6 @@
 import express from "express";
 import prisma from "../lib/prisma.js";
+import { requireAuth, requireAdmin } from "../lib/authMiddleware.js";
 
 const router = express.Router();
 
@@ -16,8 +17,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST /api/blocked-dates — Bloquear um dia (admin)
-router.post("/", async (req, res) => {
+// POST /api/blocked-dates — Bloquear um dia (apenas admin)
+router.post("/", requireAuth, requireAdmin, async (req, res) => {
   try {
     const { date, reason } = req.body;
 
@@ -45,8 +46,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-// DELETE /api/blocked-dates/:id — Remover bloqueio (admin)
-router.delete("/:id", async (req, res) => {
+// DELETE /api/blocked-dates/:id — Remover bloqueio (apenas admin)
+router.delete("/:id", requireAuth, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 

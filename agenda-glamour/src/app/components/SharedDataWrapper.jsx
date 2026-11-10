@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import App from "../../App.jsx";
 import AdminDashboard from "./AdminDashboard";
+import AdminLoginScreen from "./AdminLoginScreen";
 import {
   servicesApi,
   professionalsApi,
   appointmentsApi,
   clientAuthApi,
+  adminAuthApi,
 } from "../../services/api.js";
 
 // ─── Tela de Login do Cliente (Regra 1) ────────────────────────────────────
@@ -241,6 +243,12 @@ export function SharedDataWrapper() {
     }
   });
 
+  // Estado do admin logado (persistido no localStorage via adminAuthApi)
+  const [loggedAdmin, setLoggedAdmin] = useState(() => {
+    const session = adminAuthApi.getSession();
+    return session ? session.user : null;
+  });
+
   // Regra 1: Salvar/limpar cliente no localStorage
   const handleLogin = (client) => {
     localStorage.setItem("glamour_client", JSON.stringify(client));
@@ -250,6 +258,16 @@ export function SharedDataWrapper() {
   const handleLogout = () => {
     localStorage.removeItem("glamour_client");
     setLoggedClient(null);
+  };
+
+  // Admin login/logout
+  const handleAdminLogin = (adminUser) => {
+    setLoggedAdmin(adminUser);
+  };
+
+  const handleAdminLogout = () => {
+    adminAuthApi.logout();
+    setLoggedAdmin(null);
   };
 
   // Carregar dados do backend na inicialização
@@ -546,6 +564,12 @@ export function SharedDataWrapper() {
   // Regra 1: Exibir tela de login se o cliente não estiver autenticado
   // (apenas na rota "/", não no painel admin)
   const isAdminRoute = window.location.pathname.startsWith("/admin");
+
+  // Proteger rota /admin: exibir tela de login de admin se não autenticado
+  if (isAdminRoute && !loggedAdmin) {
+    return <AdminLoginScreen onLogin={handleAdminLogin} />;
+  }
+
   if (!loggedClient && !isAdminRoute) {
     return <ClientLoginScreen onLogin={handleLogin} />;
   }
@@ -595,6 +619,8 @@ export function SharedDataWrapper() {
               onAddService={handleAddService}
               onUpdateService={handleUpdateService}
               onDeleteService={handleDeleteService}
+              loggedAdmin={loggedAdmin}
+              onAdminLogout={handleAdminLogout}
             />
           }
         />

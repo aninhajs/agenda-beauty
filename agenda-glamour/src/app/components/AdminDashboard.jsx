@@ -93,7 +93,7 @@ function BlockedDatesManager() {
           <Icon name="calendar" size={24} style={{ color: "#3b82f6" }} />
           <h3
             style={{
-              color: "#fff",
+              color: "black",
               margin: 0,
               fontSize: "20px",
               fontWeight: "700",
@@ -104,7 +104,7 @@ function BlockedDatesManager() {
         </div>
         <p
           style={{
-            color: "rgba(255,255,255,0.6)",
+            color: "black",
             fontSize: "14px",
             marginBottom: "24px",
             marginLeft: "36px",
@@ -126,7 +126,7 @@ function BlockedDatesManager() {
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             <label
               style={{
-                color: "rgba(255,255,255,0.8)",
+                color: "black",
                 fontSize: "13px",
                 fontWeight: "700",
                 textTransform: "uppercase",
@@ -142,7 +142,7 @@ function BlockedDatesManager() {
               onChange={(e) => setNewDate(e.target.value)}
               required
               style={{
-                background: "rgba(255,255,255,0.08)",
+                background: "black",
                 border: "1px solid rgba(255,255,255,0.15)",
                 borderRadius: "12px",
                 padding: "12px 16px",
@@ -174,7 +174,7 @@ function BlockedDatesManager() {
           >
             <label
               style={{
-                color: "rgba(255,255,255,0.8)",
+                color: "black",
                 fontSize: "13px",
                 fontWeight: "700",
                 textTransform: "uppercase",
@@ -299,7 +299,7 @@ function BlockedDatesManager() {
           <div>
             <h3
               style={{
-                color: "#fff",
+                color: "black",
                 margin: 0,
                 fontSize: "20px",
                 fontWeight: "700",
@@ -309,7 +309,7 @@ function BlockedDatesManager() {
             </h3>
             <p
               style={{
-                color: "rgba(255,255,255,0.5)",
+                color: "black",
                 fontSize: "12px",
                 margin: "4px 0 0 0",
               }}
@@ -470,6 +470,8 @@ export default function AdminDashboard({
   onAddService,
   onUpdateService,
   onDeleteService,
+  loggedAdmin = null,
+  onAdminLogout,
 }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -630,97 +632,115 @@ export default function AdminDashboard({
     // </div>
 
     <div className="admin-dashboard">
-      {/* Cabeçalho */}
-      <div className="admin-header">
-        <div className="admin-header-content">
-          <div className="admin-header-info">
-            <div className="admin-header-icon">
-              <Icon name="crown" size={32} />
+      {/* Header Profissional Compacto */}
+      <div className="admin-header-compact">
+        <div className="admin-header-compact-content">
+          <div className="admin-header-compact-info">
+            <div className="admin-header-compact-icon">
+              <Icon name="crown" size={24} />
             </div>
             <div>
-              <h1 className="admin-header-title">Painel Administrativo</h1>
-              <p className="admin-header-subtitle">Central de gestão premium</p>
+              <h1 className="admin-header-compact-title">
+                Painel Administrativo
+              </h1>
+              <p className="admin-header-compact-subtitle">
+                {loggedAdmin ? `Olá, ${loggedAdmin.name}` : "Central de gestão"}
+              </p>
             </div>
           </div>
-          <div className="admin-header-badge">
-            <Icon name="shield" size={20} />
-            <span>Admin</span>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {/* Menu Mobile Toggle */}
+            <button
+              className="admin-sidebar-toggle"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle sidebar"
+            >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
           </div>
         </div>
       </div>
 
-      {/* Navegação Estilizada como Links */}
-      <div className="admin-tabs">
-        {/* Botão Hambúrguer para Mobile */}
-        <div className="admin-menu-toggle">
-          <button
-            className="admin-menu-button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-          <span className="admin-current-tab">
-            {tabItems.find((tab) => tab.id === activeTab)?.title || "Dashboard"}
-          </span>
-        </div>
+      {/* Layout Principal: Sidebar + Conteúdo */}
+      <div className="admin-container">
+        {/* Sidebar de Navegação */}
+        <aside className={`admin-sidebar ${mobileMenuOpen ? "open" : ""}`}>
+          <nav className="admin-nav">
+            {tabItems.map((tab) => (
+              <button
+                key={tab.id}
+                className={`admin-nav-item ${activeTab === tab.id ? "active" : ""}`}
+                onClick={() => handleTabChange(tab.id)}
+                title={tab.title}
+              >
+                <span className="admin-nav-icon">
+                  <Icon name={tab.icon} size={20} />
+                </span>
+                <div className="admin-nav-text">
+                  <span className="admin-nav-title">{tab.title}</span>
+                  <span className="admin-nav-desc">{tab.desc}</span>
+                </div>
+              </button>
+            ))}
+          </nav>
+        </aside>
 
-        {/* Navegação Desktop e Mobile Menu */}
-        <nav
-          className={`admin-tabs-list ${mobileMenuOpen ? "mobile-open" : ""}`}
-        >
-          {tabItems.map((tab) => (
-            <button
-              key={tab.id}
-              className={`admin-tab ${activeTab === tab.id ? "active" : ""}`}
-              onClick={() => handleTabChange(tab.id)}
-              style={{ cursor: "pointer", textAlign: "left", width: "100%" }}
-            >
-              <Icon name={tab.icon} size={20} />
-              <span className="admin-tab-text">
-                <span className="admin-tab-title">{tab.title}</span>
-                <span className="admin-tab-desc">{tab.desc}</span>
-              </span>
-            </button>
-          ))}
-        </nav>
+        {/* Overlay para Mobile */}
+        {mobileMenuOpen && (
+          <div
+            className="admin-sidebar-overlay"
+            onClick={() => setMobileMenuOpen(false)}
+          ></div>
+        )}
 
-        {/* Conteúdo Dinâmico */}
-        <div className="admin-tabs-content">
-          {activeTab === "overview" && (
-            <DashboardOverview
-              appointments={appointments}
-              professionals={professionals}
-              services={services}
-            />
-          )}
-          {activeTab === "appointments" && (
-            <AdminAppointments
-              appointments={appointments}
-              onUpdate={onUpdateAppointment}
-              onDelete={onDeleteAppointment}
-            />
-          )}
-          {activeTab === "professionals" && (
-            <ProfessionalsManagement
-              professionals={professionals}
-              onAdd={onAddProfessional}
-              onUpdate={onUpdateProfessional}
-              onDelete={onDeleteProfessional}
-            />
-          )}
-          {activeTab === "services" && (
-            <ServicesManagement
-              services={services}
-              onAdd={onAddService}
-              onUpdate={onUpdateService}
-              onDelete={onDeleteService}
-            />
-          )}
-          {activeTab === "blocked" && <BlockedDatesManager />}
-        </div>
+        {/* Conteúdo Principal */}
+        <main className="admin-main">
+          <div className="admin-tabs-content">
+            {activeTab === "overview" && (
+              <DashboardOverview
+                appointments={appointments}
+                professionals={professionals}
+                services={services}
+              />
+            )}
+            {activeTab === "appointments" && (
+              <AdminAppointments
+                appointments={appointments}
+                onUpdate={onUpdateAppointment}
+                onDelete={onDeleteAppointment}
+              />
+            )}
+            {activeTab === "professionals" && (
+              <ProfessionalsManagement
+                professionals={professionals}
+                onAdd={onAddProfessional}
+                onUpdate={onUpdateProfessional}
+                onDelete={onDeleteProfessional}
+              />
+            )}
+            {activeTab === "services" && (
+              <ServicesManagement
+                services={services}
+                onAdd={onAddService}
+                onUpdate={onUpdateService}
+                onDelete={onDeleteService}
+              />
+            )}
+            {activeTab === "blocked" && <BlockedDatesManager />}
+          </div>
+        </main>
       </div>
     </div>
   );
